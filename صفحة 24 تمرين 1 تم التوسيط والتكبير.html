@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 2: Grammar - Page 24 (Top Goal)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fredoka & Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Fredoka', 'Cairo', sans-serif;
+            background-color: #f7fbf8;
+            background-image: 
+                radial-gradient(#bbf7d0 1.2px, transparent 1.2px), 
+                radial-gradient(#fde68a 1.2px, #f7fbf8 1.2px);
+            background-size: 32px 32px;
+            background-position: 0 0, 16px 16px;
+            overflow-x: hidden;
+        }
+
+        .en-font {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .ar-font {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .comic-panel {
+            border: 3.5px solid #292524;
+            border-radius: 24px;
+            box-shadow: 0 6px 0 #292524;
+            overflow: hidden;
+            background: #ffffff;
+            transition: all 0.25s ease;
+        }
+
+        .comic-panel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 9px 0 #292524;
+        }
+
+        /* بالونات المحادثة مع توسيط تام لجميع العناصر */
+        .speech-bubble {
+            position: relative;
+            background: #ffffff;
+            border: 2.5px solid #0f766e;
+            border-radius: 16px;
+            box-shadow: 0 3px 0 #0f766e;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .speech-bubble:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 0 #0f766e;
+        }
+
+        .speech-bubble.active-speech {
+            background-color: #fefce8 !important;
+            border-color: #d97706 !important;
+            box-shadow: 0 4px 0 #d97706, 0 0 0 3px #fde047 !important;
+            transform: scale(1.02);
+        }
+
+        .speech-bubble .ar-font {
+            text-align: center;
+            display: block;
+            direction: rtl;
+        }
+
+        /* جعل الإطار يتطابق مع حجم الصورة بالكامل بدون قص */
+        .image-frame-lg {
+            min-height: 14rem;
+            height: auto;
+            transition: all 0.25s ease;
+        }
+        @media (min-width: 640px) {
+            .image-frame-lg {
+                min-height: 16rem;
+                height: auto;
+            }
+        }
+
+        .image-frame-lg.has-custom-img {
+            min-height: 0 !important;
+            height: auto !important;
+        }
+
+        /* تنسيقات الجدول وتظليل الجملة باللون الأصفر عند القراءة */
+        .chart-row {
+            transition: all 0.2s ease;
+        }
+
+        .chart-cell {
+            position: relative;
+            transition: all 0.25s ease;
+        }
+
+        .sentence-text {
+            display: inline-block;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 10px;
+            padding: 3px 8px;
+            text-align: center;
+        }
+
+        /* التظليل باللون الأصفر الفاقع والمضيء مع تكبير الخط عند القراءة */
+        .chart-cell.active-speech {
+            background-color: #fef9c3 !important;
+            box-shadow: inset 0 0 0 2.5px #facc15 !important;
+        }
+
+        .chart-cell.active-speech .sentence-text,
+        .speech-bubble.active-speech .sentence-text,
+        .active-speech .sentence-text {
+            background-color: #fde047 !important;
+            color: #713f12 !important;
+            box-shadow: 0 0 0 3.5px #facc15, 0 6px 18px rgba(250, 204, 21, 0.6) !important;
+            transform: scale(1.04);
+            border-radius: 8px;
+        }
+
+        .rule-btn {
+            cursor: pointer;
+            padding: 8px 18px;
+            border-radius: 9999px;
+            border: 2.5px solid transparent;
+            font-size: 1rem;
+            font-weight: 900;
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            user-select: none;
+            background-color: #ffffff;
+            color: #334155;
+            box-shadow: 0 2px 0 #cbd5e1;
+        }
+
+        @media (min-width: 640px) {
+            .rule-btn {
+                font-size: 1.15rem;
+                padding: 10px 24px;
+            }
+        }
+
+        .rule-btn:hover {
+            background-color: #f0fdf4;
+            color: #0d9488;
+            transform: scale(1.04);
+        }
+
+        .rule-btn.circled-correct {
+            color: #047857 !important;
+            border-color: #059669 !important;
+            background-color: #d1fae5 !important;
+            border-radius: 55% 45% 58% 42% / 46% 56% 44% 54%;
+            box-shadow: 0 3px 10px rgba(5, 150, 105, 0.25);
+            font-weight: 900;
+            transform: rotate(-1.5deg) scale(1.06);
+        }
+
+        .rule-btn.circled-wrong {
+            color: #dc2626 !important;
+            border-color: #ef4444 !important;
+            background-color: #fee2e2 !important;
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px) rotate(-1.5deg); }
+            75% { transform: translateX(5px) rotate(1.5deg); }
+        }
+
+        .action-now {
+            text-decoration: underline wavy #0284c7 3px;
+            text-underline-offset: 4px;
+            font-weight: 800;
+        }
+
+        .action-routine {
+            border: 2px dashed #d97706;
+            border-radius: 9999px;
+            padding: 1px 6px;
+            background-color: #fef3c7;
+            font-weight: 800;
+        }
+
+        .unit-title-shadow {
+            text-shadow: 
+                3px 3px 0 #1e293b,
+                -2px -2px 0 #1e293b,
+                2px -2px 0 #1e293b,
+                -2px 2px 0 #1e293b,
+                0 4px 0 #1e293b;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800">
+
+    <!-- Navigation & Control Bar -->
+    <nav class="bg-white/95 backdrop-blur-md border-b-2 border-emerald-200 sticky top-0 z-40 px-3 sm:px-4 py-2.5 shadow-sm">
+        <div class="max-w-6xl mx-auto flex items-center justify-between gap-2 flex-wrap">
+            <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="font-black text-emerald-800 text-sm sm:text-base">Unit 2: Grammar • Page 24</span>
+            </div>
+
+            <div class="flex items-center gap-2 flex-wrap">
+                <!-- قائمة أصوات متحدثي اللغة الإنجليزية -->
+                <div class="relative">
+                    <button onclick="toggleVoiceDropdown()" id="voiceSelectorBtn" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-900 rounded-xl text-xs sm:text-sm font-black shadow-sm flex items-center gap-2 transition active:scale-95">
+                        <i class="fa-solid fa-user-tie text-indigo-600"></i>
+                        <span id="navSpeakerName">Samantha (US)</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-indigo-500"></i>
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div id="voiceDropdownMenu" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl border-2 border-indigo-100 p-2 z-50 text-left">
+                        <div class="text-[11px] font-bold text-slate-400 px-3 py-1 uppercase tracking-wider">Native English Speakers</div>
+                        <div id="voiceOptionsList" class="flex flex-col gap-1 max-h-56 overflow-y-auto">
+                            <!-- سيتم توليد المتحدثين برمجياً -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- زر القراءة المتتالية مرتين -->
+                <button id="playAllBtn" onclick="togglePlayFullLesson()" class="px-3.5 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl text-xs sm:text-sm font-black shadow flex items-center gap-2 transition active:scale-95">
+                    <i id="playAllIcon" class="fa-solid fa-play"></i>
+                    <span id="playAllText">Auto Read (Repeat 2x)</span>
+                </button>
+
+                <!-- زر تبديل السرعة -->
+                <button onclick="toggleSpeechRate()" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-xl text-xs sm:text-sm font-bold text-slate-700 flex items-center gap-1.5">
+                    <i class="fa-solid fa-gauge-high text-teal-600"></i>
+                    <span id="speedDisplay">Calm (0.75x)</span>
+                </button>
+
+                <!-- زر إظهار / إخفاء الحلول -->
+                <button onclick="toggleAllAnswers()" id="showAnswersBtn" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs sm:text-sm font-black shadow flex items-center gap-1.5 transition active:scale-95">
+                    <i class="fa-solid fa-key"></i>
+                    <span id="showAnswersText">Show Answers</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Learning Content -->
+    <main class="max-w-6xl w-full mx-auto px-3 sm:px-4 py-5 flex-grow space-y-7">
+
+        <!-- Header -->
+        <header class="relative mb-3 text-center select-none">
+            <div class="flex items-center justify-center gap-3 flex-wrap mb-1">
+                <div class="w-13 h-13 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-teal-400 to-emerald-600 text-white flex items-center justify-center font-black text-3xl sm:text-4xl shadow-lg border-4 border-white ring-4 ring-emerald-300">
+                    2
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-black en-font tracking-wide text-rose-500 unit-title-shadow">
+                    <span class="text-indigo-400">UNIT </span>
+                    <span class="text-amber-400">2: </span>
+                    <span class="text-rose-400">GRAMMAR</span>
+                </h2>
+            </div>
+
+            <!-- العنوان الرئيسي للقواعد -->
+            <div class="inline-flex items-center gap-2 bg-gradient-to-r from-pink-600 to-rose-700 text-white px-5 sm:px-7 py-2 rounded-2xl font-black text-base sm:text-lg shadow-md border-2 border-pink-800 my-2">
+                <i class="fa-solid fa-book-open"></i>
+                <span>Simple Present vs. Present Progressive</span>
+                <span class="ar-font text-xs font-bold text-pink-100 hidden sm:inline">(الروتين المتكرر والمضارع المستمر)</span>
+            </div>
+
+            <!-- شارات التوجيه وأسماء المتحدثين -->
+            <div class="flex items-center justify-center gap-3 mt-2 flex-wrap">
+                <button onclick="toggleVoiceDropdown()" class="bg-gradient-to-r from-indigo-50 to-purple-50 text-indigo-900 border-2 border-indigo-200 px-3.5 py-1 rounded-full text-xs sm:text-sm font-black shadow-sm flex items-center gap-2 hover:border-indigo-400 transition cursor-pointer">
+                    <span class="w-5 h-5 rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-white flex items-center justify-center text-[10px] shadow-inner">
+                        <i class="fa-solid fa-user-group text-[9px]"></i>
+                    </span>
+                    <span id="speakerBadgeName">Speaker: Samantha</span>
+                    <span class="text-[10px] bg-indigo-200/90 text-indigo-900 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">Native EN</span>
+                </button>
+
+                <div class="bg-emerald-50 text-emerald-800 border border-emerald-300 px-3 py-1 rounded-full font-bold text-xs flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-repeat text-emerald-600"></i>
+                    <span>Repeats 2x • تكرار مرتين</span>
+                </div>
+
+                <div class="bg-amber-100 text-amber-900 border border-amber-300 px-3 py-1 rounded-full font-bold text-xs flex items-center gap-1.5">
+                    <i class="fa-solid fa-volume-high text-amber-700"></i>
+                    <span>اضغط على أي جملة أو بالون حوار للاستماع</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- ========================================================================= -->
+        <!-- EXERCISE 1: Read the chart -->
+        <!-- ========================================================================= -->
+        <section class="bg-white rounded-3xl p-4 sm:p-6 shadow-xl border-3 border-teal-600 overflow-hidden" id="section-exercise-1">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4 border-b border-teal-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-teal-600 text-white flex items-center justify-center font-black text-lg shadow-sm">
+                        1
+                    </div>
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-black text-teal-900 en-font leading-tight">Read the chart.</h2>
+                        <p class="text-xs font-bold text-slate-500 ar-font">جدول مقارنة القواعد: الروتين والعادات اليومية مقابل الأحداث الجارية الآن</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <!-- زر تشغيل وقراءة الجدول مع التكرار مرتين ويتوقف هنا -->
+                    <button id="playEx1Btn" onclick="togglePlayExercise1()" class="px-4 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl text-xs sm:text-sm font-black shadow flex items-center gap-2 transition active:scale-95" title="قراءة جدول القواعد بالتتابع وتكرار كل جملة مرتين">
+                        <i id="playEx1Icon" class="fa-solid fa-play"></i>
+                        <span id="playEx1Text">Auto Read Chart (Repeat 2x)</span>
+                    </button>
+                    <!-- زر إيقاف القراءة هنا -->
+                    <button id="stopEx1Btn" onclick="stopAutoPlay()" class="px-3.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 rounded-xl text-xs sm:text-sm font-black shadow-sm flex items-center gap-1.5 transition active:scale-95" title="إيقاف القراءة فوراً">
+                        <i class="fa-solid fa-circle-stop text-rose-600"></i>
+                        <span>Stop Reading • وقف القراءة</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grammar Comparison Table -->
+            <div class="overflow-x-auto rounded-2xl border-2 border-teal-200 shadow-sm">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gradient-to-r from-teal-700 to-emerald-700 text-white text-base sm:text-lg font-black">
+                            <th class="p-3.5 sm:p-5 border-r border-teal-600/40 w-1/4">Type</th>
+                            <th class="p-3.5 sm:p-5 border-r border-teal-600/40 w-[38%]">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-amber-300 text-lg">●</span>
+                                    <span>Simple Present (Routines)</span>
+                                </div>
+                            </th>
+                            <th class="p-3.5 sm:p-5 w-[37%]">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-sky-300 text-lg">●</span>
+                                    <span>Present Progressive (Now)</span>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-teal-100 text-slate-800">
+                        <!-- Affirmative -->
+                        <tr id="chart-row-1" class="chart-row bg-white">
+                            <td class="p-4 sm:p-5 font-black text-teal-800 border-r border-teal-100 text-base sm:text-lg">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-7 h-7 rounded-lg bg-teal-100 text-teal-800 flex items-center justify-center text-sm font-black shadow-xs">✓</span>
+                                    <span>Affirmative</span>
+                                </div>
+                            </td>
+                            <td class="chart-cell p-4 sm:p-5 border-r border-teal-100 cursor-pointer hover:bg-emerald-50/70" onclick="handleChartCellClick('She reads comic books every day.', 'chart-bubble-1')" id="chart-bubble-1">
+                                <p class="sentence-text text-base sm:text-lg md:text-xl font-black leading-relaxed text-slate-900">
+                                    She <span class="text-sky-600 font-black underline decoration-sky-400 decoration-3">reads</span> comic books every day.
+                                </p>
+                                <span class="text-xs sm:text-sm text-slate-500 font-semibold block ar-font mt-1">هي تقرأ القصص المصورة كل يوم (عادة)</span>
+                            </td>
+                            <td class="chart-cell p-4 sm:p-5 cursor-pointer hover:bg-emerald-50/70" onclick="handleChartCellClick('She is reading a comic book now.', 'chart-bubble-2')" id="chart-bubble-2">
+                                <p class="sentence-text text-base sm:text-lg md:text-xl font-black leading-relaxed text-slate-900">
+                                    She <span class="text-sky-600 font-black underline decoration-sky-400 decoration-3">is reading</span> a comic book now.
+                                </p>
+                                <span class="text-xs sm:text-sm text-slate-500 font-semibold block ar-font mt-1">هي تقرأ قصة مصورة الآن (في هذه اللحظة)</span>
+                            </td>
+                        </tr>
+
+                        <!-- Negative -->
+                        <tr id="chart-row-2" class="chart-row bg-slate-50/60">
+                            <td class="p-4 sm:p-5 font-black text-rose-700 border-r border-teal-100 text-base sm:text-lg">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-7 h-7 rounded-lg bg-rose-100 text-rose-800 flex items-center justify-center text-sm font-black shadow-xs">✕</span>
+                                    <span>Negative</span>
+                                </div>
+                            </td>
+                            <td class="chart-cell p-4 sm:p-5 border-r border-teal-100 cursor-pointer hover:bg-emerald-50/70" onclick="handleChartCellClick('He doesn\'t catch the bus to school.', 'chart-bubble-3')" id="chart-bubble-3">
+                                <p class="sentence-text text-base sm:text-lg md:text-xl font-black leading-relaxed text-slate-900">
+                                    He <span class="text-sky-600 font-black underline decoration-sky-400 decoration-3">doesn't catch</span> the bus to school.
+                                </p>
+                                <span class="text-xs sm:text-sm text-slate-500 font-semibold block ar-font mt-1">هو لا يلحق بالحافلة إلى المدرسة</span>
+                            </td>
+                            <td class="chart-cell p-4 sm:p-5 cursor-pointer hover:bg-emerald-50/70" onclick="handleChartCellClick('He is not catching the bus now.', 'chart-bubble-4')" id="chart-bubble-4">
+                                <p class="sentence-text text-base sm:text-lg md:text-xl font-black leading-relaxed text-slate-900">
+                                    He <span class="text-sky-600 font-black underline decoration-sky-400 decoration-3">is not catching</span> the bus now.
+                                </p>
+                                <span class="text-xs sm:text-sm text-slate-500 font-semibold block ar-font mt-1">هو لا يلحق بالحافلة في الوقت الحالي</span>
+                            </td>
+                        </tr>
+
+                        <!-- Questions -->
+                        <tr id="chart-row-3" class="chart-row bg-white">
+                            <td class="p-4 sm:p-5 font-black text-amber-700 border-r border-teal-100 text-base sm:text-lg">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-7 h-7 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center text-sm font-black shadow-xs">?</span>
+                                    <span>Questions</span>
+                                </div>
+                            </td>
+                            <td class="chart-cell p-4 sm:p-5 border-r border-teal-100 cursor-pointer hover:bg-emerald-50/70" onclick="handleChartCellClick('Do they visit their grandparents? Yes, they do. No, they don\'t.', 'chart-bubble-5')" id="chart-bubble-5">
+                                <div class="sentence-text">
+                                    <p class="text-base sm:text-lg md:text-xl font-black leading-relaxed text-slate-900">
+                                        <span class="text-sky-600 font-black">Do</span> they <span class="text-sky-600 font-black">visit</span> their grandparents?
+                                    </p>
+                                    <div class="mt-1.5 pt-1.5 border-t border-dashed border-teal-200 text-sm sm:text-base font-black text-teal-900">
+                                        Yes, they <span class="text-sky-600 font-black">do</span>. / No, they <span class="text-sky-600 font-black">don't</span>.
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="chart-cell p-4 sm:p-5 cursor-pointer hover:bg-emerald-50/70" onclick="handleChartCellClick('Are they visiting their grandparents now? Yes, they are. No, they aren\'t.', 'chart-bubble-6')" id="chart-bubble-6">
+                                <div class="sentence-text">
+                                    <p class="text-base sm:text-lg md:text-xl font-black leading-relaxed text-slate-900">
+                                        <span class="text-sky-600 font-black">Are</span> they <span class="text-sky-600 font-black">visiting</span> their grandparents now?
+                                    </p>
+                                    <div class="mt-1.5 pt-1.5 border-t border-dashed border-teal-200 text-sm sm:text-base font-black text-teal-900">
+                                        Yes, they <span class="text-sky-600 font-black">are</span>. / No, they <span class="text-sky-600 font-black">aren't</span>.
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- EXERCISE 2: Look, read, and answer -->
+        <!-- ========================================================================= -->
+        <section class="bg-white rounded-3xl p-4 sm:p-6 shadow-xl border-3 border-teal-600">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-5 border-b border-teal-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-teal-600 text-white flex items-center justify-center font-black text-lg shadow-sm">
+                        2
+                    </div>
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-black text-teal-900 en-font leading-tight">Look, read, and answer.</h2>
+                        <p class="text-xs font-bold text-slate-500 ar-font">انظر إلى المشاهد المصورة واستمع للمحادثات، وميز بين ما يحدث الآن وما يمثل الروتين اليومي 🔍</p>
+                    </div>
+                </div>
+
+                <!-- زر القراءة التلقائية المخصص للفقرة الثانية + دليل الإشارات -->
+                <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
+                    <button id="playEx2Btn" onclick="togglePlayExercise2()" class="px-4 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl text-xs sm:text-sm font-black shadow flex items-center gap-2 transition active:scale-95" title="قراءة محادثات التمرين الثاني بالتتابع وتكرارها مرتين">
+                        <i id="playEx2Icon" class="fa-solid fa-play"></i>
+                        <span id="playEx2Text">Auto Read (Repeat 2x)</span>
+                    </button>
+                    <span class="bg-sky-100 text-sky-800 border border-sky-300 px-3 py-1 rounded-xl flex items-center gap-1.5 shadow-sm">
+                        <span class="w-2.5 h-2.5 rounded-full bg-sky-600"></span>
+                        <span>1. What they are doing now (underline)</span>
+                    </span>
+                    <span class="bg-amber-100 text-amber-800 border border-amber-300 px-3 py-1 rounded-xl flex items-center gap-1.5 shadow-sm">
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                        <span>2. Routines & habits (circle)</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 3 Scenes Grid with Big Frames & Upload -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                <!-- Scene 1: Bus & Comic Book -->
+                <div class="comic-panel p-4 flex flex-col justify-between bg-[#f0fdf4]" id="panel-scene-1">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-emerald-600 text-white font-black text-xs px-3 py-1 rounded-full shadow-sm">Scene 1</span>
+                            <!-- زر رفع وحفظ الصورة بشكل دائم -->
+                            <button type="button" 
+                                onclick="event.stopPropagation(); triggerImageUpload('scene1')" 
+                                title="Add or change image • إضافة أو تغيير الصورة"
+                                class="w-7 h-7 rounded-full bg-white hover:bg-emerald-100 border border-emerald-300 text-emerald-700 flex items-center justify-center text-xs shadow-sm transition active:scale-95">
+                                <i class="fa-solid fa-image"></i>
+                            </button>
+                            <input type="file" id="file-upload-scene1" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'scene1')" />
+                        </div>
+
+                        <!-- Big Image Frame (h-56 sm:h-64) -->
+                        <div id="image-container-scene1" class="image-frame-lg w-full rounded-2xl overflow-hidden mb-4 border-2 border-emerald-200 bg-gradient-to-b from-sky-100 to-emerald-100 relative flex items-center justify-center shadow-inner">
+                            <svg viewBox="0 0 240 180" class="w-full h-full object-contain drop-shadow">
+                                <rect x="20" y="20" width="200" height="140" rx="16" fill="#bae6fd" stroke="#0284c7" stroke-width="3"/>
+                                <rect x="40" y="60" width="70" height="90" rx="8" fill="#3b82f6"/>
+                                <rect x="130" y="60" width="70" height="90" rx="8" fill="#3b82f6"/>
+                                <circle cx="75" cy="80" r="18" fill="#fed7aa"/>
+                                <path d="M60 70 Q75 55 90 70 Z" fill="#92400e"/>
+                                <rect x="62" y="98" width="26" height="45" rx="6" fill="#10b981"/>
+                                <circle cx="165" cy="80" r="18" fill="#fed7aa"/>
+                                <path d="M148 72 Q165 52 182 72 L182 95 L148 95 Z" fill="#f59e0b"/>
+                                <rect x="152" y="98" width="26" height="45" rx="6" fill="#ec4899"/>
+                                <polygon points="148,110 182,105 185,130 152,135" fill="#fde047" stroke="#b45309" stroke-width="2"/>
+                                <text x="154" y="125" font-size="8" font-weight="900" fill="#dc2626">COMIC</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Dialogues Centered -->
+                    <div class="flex flex-col gap-2.5">
+                        <div id="scene1-bubble-1" onclick="readDialogueBubble('scene1-bubble-1')" data-text="What are you doing?" class="speech-bubble p-3 text-center">
+                            <span class="text-xs text-teal-800 font-black block mb-0.5 text-center">Boy asks:</span>
+                            <p class="sentence-text text-base sm:text-lg md:text-xl font-black text-slate-900 leading-relaxed text-center">
+                                What <span class="action-now text-sky-600">are</span> you <span class="action-now text-sky-600">doing</span>?
+                            </p>
+                            <span dir="rtl" class="text-xs sm:text-sm text-slate-500 font-bold ar-font block text-center mt-1">ماذا تفعلين الآن؟</span>
+                        </div>
+
+                        <div id="scene1-bubble-2" onclick="readDialogueBubble('scene1-bubble-2')" data-text="I am reading a comic book. I always read comic books." class="speech-bubble p-3 text-center">
+                            <span class="text-xs text-pink-700 font-black block mb-0.5 text-center">Girl answers:</span>
+                            <p class="sentence-text text-base sm:text-lg md:text-xl font-black text-slate-900 leading-relaxed text-center">
+                                I <span class="action-now text-sky-600">am reading</span> a comic book. I <span class="action-routine text-amber-800">always read</span> comic books.
+                            </p>
+                            <span dir="rtl" class="text-xs sm:text-sm text-slate-500 font-bold ar-font block text-center mt-1">أنا أقرأ قصة مصورة الآن. أنا أقرأ دائماً القصص المصورة.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scene 2: School Bus Home -->
+                <div class="comic-panel p-4 flex flex-col justify-between bg-[#fffbeb]" id="panel-scene-2">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-amber-600 text-white font-black text-xs px-3 py-1 rounded-full shadow-sm">Scene 2</span>
+                            <!-- زر رفع وحفظ الصورة بشكل دائم -->
+                            <button type="button" 
+                                onclick="event.stopPropagation(); triggerImageUpload('scene2')" 
+                                title="Add or change image • إضافة أو تغيير الصورة"
+                                class="w-7 h-7 rounded-full bg-white hover:bg-amber-100 border border-amber-300 text-amber-700 flex items-center justify-center text-xs shadow-sm transition active:scale-95">
+                                <i class="fa-solid fa-image"></i>
+                            </button>
+                            <input type="file" id="file-upload-scene2" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'scene2')" />
+                        </div>
+
+                        <!-- Big Image Frame (h-56 sm:h-64) -->
+                        <div id="image-container-scene2" class="image-frame-lg w-full rounded-2xl overflow-hidden mb-4 border-2 border-amber-200 bg-gradient-to-b from-sky-100 via-amber-50 to-orange-100 relative flex items-center justify-center shadow-inner">
+                            <svg viewBox="0 0 240 180" class="w-full h-full object-contain drop-shadow">
+                                <rect x="20" y="20" width="200" height="140" rx="14" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+                                <rect x="40" y="35" width="40" height="50" rx="4" fill="#bae6fd"/>
+                                <rect x="160" y="35" width="40" height="50" rx="4" fill="#bae6fd"/>
+                                <circle cx="85" cy="85" r="16" fill="#fed7aa"/>
+                                <path d="M72 75 Q85 60 98 75 Z" fill="#b45309"/>
+                                <rect x="74" y="101" width="22" height="45" rx="5" fill="#f97316"/>
+                                <rect x="64" y="98" width="10" height="30" rx="3" fill="#64748b"/>
+                                <circle cx="155" cy="75" r="18" fill="#fed7aa"/>
+                                <path d="M138 65 Q155 45 172 65 L172 90 L138 90 Z" fill="#dc2626"/>
+                                <rect x="144" y="93" width="22" height="55" rx="5" fill="#0284c7"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Dialogues Centered -->
+                    <div class="flex flex-col gap-2.5">
+                        <div id="scene2-bubble-1" onclick="readDialogueBubble('scene2-bubble-1')" data-text="Are we taking the bus home?" class="speech-bubble p-3 text-center">
+                            <span class="text-xs text-amber-800 font-black block mb-0.5 text-center">Boy asks:</span>
+                            <p class="sentence-text text-base sm:text-lg md:text-xl font-black text-slate-900 leading-relaxed text-center">
+                                <span class="action-now text-sky-600">Are</span> we <span class="action-now text-sky-600">taking</span> the bus home?
+                            </p>
+                            <span dir="rtl" class="text-xs sm:text-sm text-slate-500 font-bold ar-font block text-center mt-1">هل سنركب الحافلة عائدين للمنزل الآن؟</span>
+                        </div>
+
+                        <div id="scene2-bubble-2" onclick="readDialogueBubble('scene2-bubble-2')" data-text="No, we aren't." class="speech-bubble p-3 text-center">
+                            <span class="text-xs text-teal-800 font-black block mb-0.5 text-center">Mom answers:</span>
+                            <p class="sentence-text text-base sm:text-lg md:text-xl font-black text-slate-900 leading-relaxed text-center">
+                                No, we <span class="action-now text-sky-600">aren't</span>.
+                            </p>
+                            <span dir="rtl" class="text-xs sm:text-sm text-slate-500 font-bold ar-font block text-center mt-1">لا، لن نركب الحافلة.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scene 3: Car & Grandparents -->
+                <div class="comic-panel p-4 flex flex-col justify-between bg-[#fdf2f8]" id="panel-scene-3">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-rose-600 text-white font-black text-xs px-3 py-1 rounded-full shadow-sm">Scene 3</span>
+                            <!-- زر رفع وحفظ الصورة بشكل دائم -->
+                            <button type="button" 
+                                onclick="event.stopPropagation(); triggerImageUpload('scene3')" 
+                                title="Add or change image • إضافة أو تغيير الصورة"
+                                class="w-7 h-7 rounded-full bg-white hover:bg-rose-100 border border-rose-300 text-rose-700 flex items-center justify-center text-xs shadow-sm transition active:scale-95">
+                                <i class="fa-solid fa-image"></i>
+                            </button>
+                            <input type="file" id="file-upload-scene3" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'scene3')" />
+                        </div>
+
+                        <!-- Big Image Frame (h-56 sm:h-64) -->
+                        <div id="image-container-scene3" class="image-frame-lg w-full rounded-2xl overflow-hidden mb-4 border-2 border-rose-200 bg-gradient-to-b from-sky-100 via-rose-50 to-indigo-100 relative flex items-center justify-center shadow-inner">
+                            <svg viewBox="0 0 240 180" class="w-full h-full object-contain drop-shadow">
+                                <path d="M30 40 L210 40 L225 150 L15 150 Z" fill="#93c5fd" stroke="#1d4ed8" stroke-width="2.5"/>
+                                <rect x="25" y="100" width="190" height="50" rx="8" fill="#334155"/>
+                                <circle cx="85" cy="80" r="16" fill="#fed7aa"/>
+                                <path d="M72 70 Q85 55 98 70 Z" fill="#dc2626"/>
+                                <circle cx="155" cy="80" r="16" fill="#fed7aa"/>
+                                <path d="M142 70 Q155 55 168 70 Z" fill="#b45309"/>
+                                <line x1="70" y1="90" x2="100" y2="135" stroke="#ef4444" stroke-width="3"/>
+                                <line x1="140" y1="90" x2="170" y2="135" stroke="#ef4444" stroke-width="3"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Dialogues Centered -->
+                    <div class="flex flex-col gap-2.5">
+                        <div id="scene3-bubble-1" onclick="readDialogueBubble('scene3-bubble-1')" data-text="I love going to our grandparents' house! But Mom doesn't usually drive us to their house." class="speech-bubble p-3 text-center">
+                            <p class="sentence-text text-base sm:text-lg font-black text-slate-900 leading-relaxed text-center">
+                                I <span class="action-routine text-amber-800">love</span> going to our grandparents' house! But Mom <span class="action-routine text-amber-800">doesn't usually drive</span> us to their house.
+                            </p>
+                            <span dir="rtl" class="text-xs sm:text-sm text-slate-500 font-bold ar-font block text-center mt-1">أحب الذهاب لمنزل جدي وجدتي! لكن أمي لا توصلنا بالسيارة في العادة.</span>
+                        </div>
+
+                        <div id="scene3-bubble-2" onclick="readDialogueBubble('scene3-bubble-2')" data-text="Grandma sometimes makes chocolate cake!" class="speech-bubble p-3 text-center">
+                            <p class="sentence-text text-base sm:text-lg md:text-xl font-black text-slate-900 leading-relaxed text-center">
+                                Grandma <span class="action-routine text-amber-800">sometimes makes</span> chocolate cake!
+                            </p>
+                            <span dir="rtl" class="text-xs sm:text-sm text-slate-500 font-bold ar-font block text-center mt-1">جدتي أحياناً تصنع كعكة الشوكولاتة!</span>
+                        </div>
+
+                        <div id="scene3-bubble-3" onclick="readDialogueBubble('scene3-bubble-3')" data-text="Yes, she does." class="speech-bubble p-3 text-center">
+                            <p class="sentence-text text-base sm:text-lg md:text-xl font-black text-slate-900 leading-relaxed text-center">
+                                Yes, she <span class="action-routine text-amber-800">does</span>.
+                            </p>
+                            <span dir="rtl" class="text-xs sm:text-sm text-slate-500 font-bold ar-font block text-center mt-1">نعم، هي تفعل ذلك بالفعل.</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- EXERCISE 3: Read and choose the correct answers -->
+        <!-- ========================================================================= -->
+        <section class="bg-white rounded-3xl p-4 sm:p-6 shadow-xl border-3 border-teal-600">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-5 border-b border-teal-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-teal-600 text-white flex items-center justify-center font-black text-lg shadow-sm">
+                        3
+                    </div>
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-black text-teal-900 en-font leading-tight">Read and choose the correct answers.</h2>
+                        <p class="text-xs font-bold text-slate-500 ar-font">اختر القاعدة المناسبة لكل جملة، واستمع للحل الصحيح مباشرة ⭐</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button onclick="resetExercise3()" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>Reset</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Centered Rules Questions -->
+            <div class="space-y-4" id="rulesQuestionsList">
+
+                <!-- Question 1 -->
+                <div class="p-4 sm:p-6 rounded-2xl bg-gradient-to-r from-teal-50 to-emerald-50 border-2 border-teal-200 shadow-sm flex flex-col items-center justify-center text-center gap-3.5" id="q-card-1">
+                    <div class="flex items-center justify-center gap-3 flex-wrap">
+                        <span class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-teal-700 text-white font-black text-base sm:text-lg flex items-center justify-center shrink-0 shadow-sm">1</span>
+                        <p class="text-base sm:text-lg md:text-xl font-black text-slate-900 leading-relaxed">
+                            We use the <span class="text-teal-700 font-black px-3 py-1 rounded-xl bg-teal-100 border-2 border-teal-300 text-base sm:text-lg md:text-xl inline-block shadow-xs" id="blank-disp-1">[ ... ]</span> to talk about routines and habits.
+                        </p>
+                    </div>
+                    <span class="text-sm sm:text-base font-bold text-slate-600 ar-font">نستخدمه للحديث عن الروتين والعادات المتكررة</span>
+
+                    <div class="flex items-center justify-center gap-3 sm:gap-4 mt-1 flex-wrap">
+                        <button type="button" onclick="checkRuleChoice(1, 'Simple Present', this)" class="rule-btn" data-q="1" data-opt="Simple Present">
+                            Simple Present
+                        </button>
+                        <span class="text-slate-400 font-black text-lg sm:text-xl select-none">/</span>
+                        <button type="button" onclick="checkRuleChoice(1, 'Present Progressive', this)" class="rule-btn" data-q="1" data-opt="Present Progressive">
+                            Present Progressive
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="p-4 sm:p-6 rounded-2xl bg-gradient-to-r from-teal-50 to-emerald-50 border-2 border-teal-200 shadow-sm flex flex-col items-center justify-center text-center gap-3.5" id="q-card-2">
+                    <div class="flex items-center justify-center gap-3 flex-wrap">
+                        <span class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-teal-700 text-white font-black text-base sm:text-lg flex items-center justify-center shrink-0 shadow-sm">2</span>
+                        <p class="text-base sm:text-lg md:text-xl font-black text-slate-900 leading-relaxed">
+                            We use the <span class="text-teal-700 font-black px-3 py-1 rounded-xl bg-teal-100 border-2 border-teal-300 text-base sm:text-lg md:text-xl inline-block shadow-xs" id="blank-disp-2">[ ... ]</span> to talk about things that are happening now.
+                        </p>
+                    </div>
+                    <span class="text-sm sm:text-base font-bold text-slate-600 ar-font">نستخدمه للتعبير عما يحدث الآن في هذه اللحظة</span>
+
+                    <div class="flex items-center justify-center gap-3 sm:gap-4 mt-1 flex-wrap">
+                        <button type="button" onclick="checkRuleChoice(2, 'Simple Present', this)" class="rule-btn" data-q="2" data-opt="Simple Present">
+                            Simple Present
+                        </button>
+                        <span class="text-slate-400 font-black text-lg sm:text-xl select-none">/</span>
+                        <button type="button" onclick="checkRuleChoice(2, 'Present Progressive', this)" class="rule-btn" data-q="2" data-opt="Present Progressive">
+                            Present Progressive
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="p-4 sm:p-6 rounded-2xl bg-gradient-to-r from-teal-50 to-emerald-50 border-2 border-teal-200 shadow-sm flex flex-col items-center justify-center text-center gap-3.5" id="q-card-3">
+                    <div class="flex items-center justify-center gap-3 flex-wrap">
+                        <span class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-teal-700 text-white font-black text-base sm:text-lg flex items-center justify-center shrink-0 shadow-sm">3</span>
+                        <p class="text-base sm:text-lg md:text-xl font-black text-slate-900 leading-relaxed">
+                            We use <span class="italic text-teal-700 font-black">to be + verb + -ing</span> to form the <span class="text-teal-700 font-black px-3 py-1 rounded-xl bg-teal-100 border-2 border-teal-300 text-base sm:text-lg md:text-xl inline-block shadow-xs" id="blank-disp-3">[ ... ]</span>.
+                        </p>
+                    </div>
+                    <span class="text-sm sm:text-base font-bold text-slate-600 ar-font">نستخدم (am / is / are) مع الفعل مضافاً له ing لتكوين هذا الزمن</span>
+
+                    <div class="flex items-center justify-center gap-3 sm:gap-4 mt-1 flex-wrap">
+                        <button type="button" onclick="checkRuleChoice(3, 'Simple Present', this)" class="rule-btn" data-q="3" data-opt="Simple Present">
+                            Simple Present
+                        </button>
+                        <span class="text-slate-400 font-black text-lg sm:text-xl select-none">/</span>
+                        <button type="button" onclick="checkRuleChoice(3, 'Present Progressive', this)" class="rule-btn" data-q="3" data-opt="Present Progressive">
+                            Present Progressive
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- شارة رقم الصفحة 24 أسفل التمرين -->
+        <div class="mt-8 mb-4 flex items-center justify-center">
+            <div class="relative group cursor-pointer select-none">
+                <div class="absolute -inset-1.5 bg-gradient-to-r from-teal-400 via-amber-400 to-pink-500 rounded-3xl blur-md opacity-70 group-hover:opacity-100 transition duration-300"></div>
+
+                <div class="relative bg-gradient-to-b from-white to-amber-50/90 border-3 border-teal-600 rounded-2xl px-6 py-2.5 sm:px-8 sm:py-3 shadow-lg flex items-center gap-3 sm:gap-4">
+                    <div class="flex items-center gap-1 text-base sm:text-lg">
+                        <span class="text-amber-400 animate-spin" style="animation-duration: 6s;">✦</span>
+                        <span class="text-teal-600">📖</span>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <div class="w-11 h-11 sm:w-13 sm:h-13 rounded-xl bg-gradient-to-br from-emerald-500 via-teal-600 to-teal-700 text-white flex items-center justify-center font-black text-xl sm:text-2xl shadow-md border-2 border-white ring-2 ring-emerald-300 transform -rotate-3 hover:rotate-0 transition-transform">
+                            24
+                        </div>
+                        <div class="text-left leading-tight">
+                            <span class="en-font font-black text-lg sm:text-xl text-teal-800 tracking-wide block">
+                                PAGE <span class="text-rose-500">24</span>
+                            </span>
+                            <span dir="rtl" class="text-xs sm:text-sm font-bold text-amber-700 ar-font block">
+                                📖 صفحة ٢٤ • كتاب الطالب (Top Goal)
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-1 text-base sm:text-lg">
+                        <span class="text-rose-500">⭐</span>
+                        <span class="text-amber-400 animate-spin" style="animation-duration: 6s; animation-direction: reverse;">✦</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Reading Toast التنبيه الصوتي الحي -->
+    <div id="liveReadingToast" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 backdrop-blur-md text-white px-5 py-2.5 rounded-2xl shadow-2xl border border-slate-700 flex items-center gap-3 transition-all duration-300 opacity-0 pointer-events-none translate-y-8 max-w-[94vw]">
+        <div class="w-3 h-3 rounded-full bg-emerald-400 animate-ping flex-shrink-0"></div>
+        <div class="truncate">
+            <span class="text-[11px] text-slate-400 block font-sans" id="toastSpeakerLabel">Reading with Native Speaker:</span>
+            <span id="toastWord" class="en-font font-black text-amber-300 text-base sm:text-lg tracking-wide">...</span>
+        </div>
+    </div>
+
+    <!-- تذييل الصفحة -->
+    <footer class="bg-white/90 border-t border-emerald-200 mt-10 py-5 px-4 text-center text-xs text-slate-600">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p class="font-bold">
+                Unit 2: Chores & Grammar • Page 24 (Top Goal) • Simple Present vs. Present Progressive
+            </p>
+            <div class="flex items-center gap-2">
+                <span class="bg-indigo-50 text-indigo-800 px-3 py-1 rounded-full font-bold border border-indigo-200 flex items-center gap-1.5">
+                    <i class="fa-solid fa-headset text-indigo-600"></i>
+                    <span id="footerSpeakerName">Native English Voice</span>
+                </span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const exercise3Data = [
+            {
+                id: 1,
+                question: "We use the Simple Present to talk about routines and habits.",
+                correct: "Simple Present",
+                explanation: "Simple Present is used for habits and regular routines."
+            },
+            {
+                id: 2,
+                question: "We use the Present Progressive to talk about things that are happening now.",
+                correct: "Present Progressive",
+                explanation: "Present Progressive is used for actions occurring right now."
+            },
+            {
+                id: 3,
+                question: "We use to be + verb + -ing to form the Present Progressive.",
+                correct: "Present Progressive",
+                explanation: "to be (am/is/are) + verb-ing forms the Present Progressive."
+            }
+        ];
+
+        // مصفوفة جمل جدول القواعد (التمرين 1)
+        const exercise1AudioSequences = [
+            { text: "She reads comic books every day.", id: "chart-bubble-1" },
+            { text: "She is reading a comic book now.", id: "chart-bubble-2" },
+            { text: "He doesn't catch the bus to school.", id: "chart-bubble-3" },
+            { text: "He is not catching the bus now.", id: "chart-bubble-4" },
+            { text: "Do they visit their grandparents? Yes, they do. No, they don't.", id: "chart-bubble-5" },
+            { text: "Are they visiting their grandparents now? Yes, they are. No, they aren't.", id: "chart-bubble-6" }
+        ];
+
+        const exercise2AudioSequences = [
+            { text: "What are you doing?", elId: "scene1-bubble-1", panelId: "panel-scene-1" },
+            { text: "I am reading a comic book. I always read comic books.", elId: "scene1-bubble-2", panelId: "panel-scene-1" },
+            { text: "Are we taking the bus home?", elId: "scene2-bubble-1", panelId: "panel-scene-2" },
+            { text: "No, we aren't.", elId: "scene2-bubble-2", panelId: "panel-scene-2" },
+            { text: "I love going to our grandparents' house! But Mom doesn't usually drive us to their house.", elId: "scene3-bubble-1", panelId: "panel-scene-3" },
+            { text: "Grandma sometimes makes chocolate cake!", elId: "scene3-bubble-2", panelId: "panel-scene-3" },
+            { text: "Yes, she does.", elId: "scene3-bubble-3", panelId: "panel-scene-3" }
+        ];
+
+        const allLessonAudioSequences = [
+            { text: "She reads comic books every day.", elId: "chart-bubble-1" },
+            { text: "She is reading a comic book now.", elId: "chart-bubble-2" },
+            { text: "He doesn't catch the bus to school.", elId: "chart-bubble-3" },
+            { text: "He is not catching the bus now.", elId: "chart-bubble-4" },
+            { text: "Do they visit their grandparents? Yes, they do. No, they don't.", elId: "chart-bubble-5" },
+            { text: "Are they visiting their grandparents now? Yes, they are. No, they aren't.", elId: "chart-bubble-6" }
+        ];
+
+        let currentSpeechRate = 0.75;
+        let isPlayingFullLesson = false;
+        let isPlayingEx1 = false;
+        let isPlayingEx2 = false;
+        let fullLessonIndex = 0;
+        let ex1Index = 0;
+        let ex2Index = 0;
+        let activeTimeouts = [];
+        let availableVoices = [];
+        let lockedNativeVoice = null;
+        let currentAudioPlayer = null;
+        let showingAnswers = false;
+        let userRuleAnswers = {};
+
+        const presetEnglishSpeakers = [
+            { name: 'Samantha', accent: 'US Native', lang: 'en-US' },
+            { name: 'Linda', accent: 'CA Native', lang: 'en-CA' },
+            { name: 'Oliver', accent: 'UK Native', lang: 'en-GB' },
+            { name: 'Jenny', accent: 'US Natural', lang: 'en-US' },
+            { name: 'Clara', accent: 'CA Female', lang: 'en-CA' }
+        ];
+
+        // إعداد واكتشاف أصوات متحدثي اللغة الإنجليزية
+        function populateVoiceList() {
+            if (!('speechSynthesis' in window)) return;
+            const voices = window.speechSynthesis.getVoices();
+            if (!voices || voices.length === 0) return;
+
+            availableVoices = voices.filter(v => v.lang.toLowerCase().startsWith('en'));
+
+            if (!lockedNativeVoice && availableVoices.length > 0) {
+                const preferred = availableVoices.find(v => 
+                    v.name.toLowerCase().includes('samantha') || 
+                    v.name.toLowerCase().includes('linda') || 
+                    v.name.toLowerCase().includes('jenny') || 
+                    v.name.toLowerCase().includes('natural') || 
+                    v.name.toLowerCase().includes('clara')
+                );
+                lockedNativeVoice = preferred || availableVoices[0];
+            }
+
+            const listEl = document.getElementById('voiceOptionsList');
+            if (listEl) {
+                listEl.innerHTML = '';
+                const displayList = availableVoices.length > 0 ? availableVoices : presetEnglishSpeakers;
+
+                displayList.forEach((v, idx) => {
+                    const cleanName = v.name ? v.name.replace(/Google|Microsoft|Apple|Desktop|English|United States|Canada/gi, '').trim() : v.name;
+                    const region = (v.lang && v.lang.includes('GB')) ? 'UK' : (v.lang && v.lang.includes('CA')) ? 'CA' : 'US';
+                    
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'w-full text-left px-3 py-2 rounded-xl text-xs font-bold hover:bg-indigo-50 flex items-center justify-between transition';
+                    btn.onclick = () => {
+                        selectSpeaker(v);
+                        toggleVoiceDropdown();
+                    };
+                    btn.innerHTML = `
+                        <div class="flex items-center gap-2 truncate">
+                            <span class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-[10px]">
+                                <i class="fa-solid fa-microphone-lines"></i>
+                            </span>
+                            <span class="text-slate-800 font-extrabold truncate">${cleanName || 'English Speaker ' + (idx + 1)}</span>
+                        </div>
+                        <span class="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono">${region}</span>
+                    `;
+                    listEl.appendChild(btn);
+                });
+            }
+
+            if (lockedNativeVoice) {
+                updateSpeakerDisplay(lockedNativeVoice.name);
+            }
+        }
+
+        function selectSpeaker(voiceObj) {
+            lockedNativeVoice = voiceObj;
+            updateSpeakerDisplay(voiceObj.name);
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+        }
+
+        function updateSpeakerDisplay(speakerName) {
+            const cleanName = speakerName ? speakerName.replace(/Google|Microsoft|Apple|Desktop|English|United States|Canada/gi, '').trim() : 'Samantha';
+            const badge = document.getElementById('speakerBadgeName');
+            const navBadge = document.getElementById('navSpeakerName');
+            const footerBadge = document.getElementById('footerSpeakerName');
+
+            if (badge) badge.innerText = `Speaker: ${cleanName}`;
+            if (navBadge) navBadge.innerText = cleanName;
+            if (footerBadge) footerBadge.innerText = `Native Voice: ${cleanName}`;
+        }
+
+        function toggleVoiceDropdown() {
+            const menu = document.getElementById('voiceDropdownMenu');
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('voiceDropdownMenu');
+            const btn = document.getElementById('voiceSelectorBtn');
+            if (menu && !menu.classList.contains('hidden')) {
+                if (!menu.contains(e.target) && !btn.contains(e.target) && !e.target.closest('button[onclick="toggleVoiceDropdown()"]')) {
+                    menu.classList.add('hidden');
+                }
+            }
+        });
+
+        // النطق الصوتي الموحد
+        function speakSentenceWithLockedVoice(text, onFinished) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                if (lockedNativeVoice) {
+                    utterance.voice = lockedNativeVoice;
+                    utterance.lang = lockedNativeVoice.lang || 'en-US';
+                } else {
+                    utterance.lang = 'en-US';
+                }
+                utterance.rate = currentSpeechRate;
+                utterance.pitch = 1.05;
+
+                let finished = false;
+                utterance.onend = () => {
+                    if (finished) return;
+                    finished = true;
+                    if (onFinished) onFinished();
+                };
+                utterance.onerror = () => {
+                    if (finished) return;
+                    finished = true;
+                    if (onFinished) onFinished();
+                };
+
+                window.speechSynthesis.speak(utterance);
+            } else {
+                try {
+                    if (currentAudioPlayer) {
+                        currentAudioPlayer.pause();
+                        currentAudioPlayer = null;
+                    }
+                    const cleanText = encodeURIComponent(text);
+                    const cloudAudioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${cleanText}&tl=en&client=tw-ob`;
+                    const audio = new Audio(cloudAudioUrl);
+                    currentAudioPlayer = audio;
+                    audio.playbackRate = currentSpeechRate;
+                    audio.onended = () => { if (onFinished) onFinished(); };
+                    audio.onerror = () => { if (onFinished) onFinished(); };
+                    audio.play().catch(() => { if (onFinished) onFinished(); });
+                } catch(e) {
+                    if (onFinished) onFinished();
+                }
+            }
+        }
+
+        function speakPhraseOnce(text) {
+            showToast(text);
+            speakSentenceWithLockedVoice(text, () => {
+                setTimeout(hideToast, 500);
+            });
+        }
+
+        function resetAllHighlights() {
+            activeTimeouts.forEach(t => clearTimeout(t));
+            activeTimeouts = [];
+
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            if (currentAudioPlayer) {
+                currentAudioPlayer.pause();
+                currentAudioPlayer = null;
+            }
+
+            document.querySelectorAll('.speech-bubble').forEach(b => b.classList.remove('active-speech'));
+            document.querySelectorAll('.chart-cell').forEach(c => c.classList.remove('active-speech'));
+            document.querySelectorAll('.chart-row').forEach(r => r.classList.remove('speaking-row'));
+            hideToast();
+        }
+
+        // تكرار العبارة مرتين
+        function speakTextTwice(text, targetElId = null, onFinished = null) {
+            resetAllHighlights();
+
+            const el = targetElId ? document.getElementById(targetElId) : null;
+            if (el) el.classList.add('active-speech');
+            showToast(`${text} (1/2)`);
+
+            speakSentenceWithLockedVoice(text, () => {
+                const pauseTimer = setTimeout(() => {
+                    showToast(`${text} (2/2)`);
+                    speakSentenceWithLockedVoice(text, () => {
+                        const finishTimer = setTimeout(() => {
+                            if (el) el.classList.remove('active-speech');
+                            hideToast();
+                            if (onFinished) onFinished();
+                        }, 400);
+                        activeTimeouts.push(finishTimer);
+                    });
+                }, 400);
+                activeTimeouts.push(pauseTimer);
+            });
+        }
+
+        function handleChartCellClick(text, bubbleId) {
+            const el = document.getElementById(bubbleId);
+            if (el && el.classList.contains('active-speech')) {
+                stopAutoPlay();
+                return;
+            }
+            stopAutoPlay();
+            speakTextTwice(text, bubbleId);
+        }
+
+        function readDialogueBubble(bubbleId) {
+            const bubble = document.getElementById(bubbleId);
+            if (!bubble) return;
+            if (bubble.classList.contains('active-speech')) {
+                stopAutoPlay();
+                return;
+            }
+            stopAutoPlay();
+            const text = bubble.getAttribute('data-text');
+            speakTextTwice(text, bubbleId);
+        }
+
+        // تشغيل وإيقاف قراءة جدول القواعد حصراً والتوقف عند نهايته
+        function togglePlayExercise1() {
+            if (isPlayingEx1) {
+                stopAutoPlay();
+            } else {
+                stopAutoPlay();
+                startExercise1AutoPlay();
+            }
+        }
+
+        function startExercise1AutoPlay() {
+            resetAllHighlights();
+            isPlayingEx1 = true;
+            ex1Index = 0;
+            updateEx1PlayBtnUI();
+            playNextEx1Item();
+        }
+
+        function updateEx1PlayBtnUI() {
+            const btn = document.getElementById('playEx1Btn');
+            const icon = document.getElementById('playEx1Icon');
+            const text = document.getElementById('playEx1Text');
+            if (!btn) return;
+
+            if (isPlayingEx1) {
+                icon.className = 'fa-solid fa-stop';
+                text.innerText = 'Stop Reading • وقف القراءة';
+                btn.classList.replace('from-emerald-500', 'from-rose-500');
+                btn.classList.replace('to-teal-600', 'to-red-600');
+            } else {
+                icon.className = 'fa-solid fa-play';
+                text.innerText = 'Auto Read Chart (Repeat 2x)';
+                btn.classList.replace('from-rose-500', 'from-emerald-500');
+                btn.classList.replace('to-red-600', 'to-teal-600');
+            }
+        }
+
+        function playNextEx1Item() {
+            if (!isPlayingEx1 || ex1Index >= exercise1AudioSequences.length) {
+                if (ex1Index >= exercise1AudioSequences.length && typeof confetti === 'function') {
+                    confetti({ particleCount: 65, spread: 75, origin: { y: 0.5 } });
+                    showToast("اكتملت قراءة جدول القواعد بنجاح • توقفت القراءة هنا ✅");
+                }
+                stopAutoPlay();
+                return;
+            }
+
+            const item = exercise1AudioSequences[ex1Index];
+            const el = document.getElementById(item.id);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            speakTextTwice(item.text, item.id, () => {
+                if (isPlayingEx1) {
+                    ex1Index++;
+                    const timer = setTimeout(playNextEx1Item, 500);
+                    activeTimeouts.push(timer);
+                }
+            });
+        }
+
+        // تشغيل تلقائي لجميع التمارين
+        function startAutoDirectPlay() {
+            resetAllHighlights();
+            isPlayingFullLesson = true;
+            fullLessonIndex = 0;
+            updatePlayBtnUI();
+            playNextLessonItem();
+        }
+
+        function togglePlayFullLesson() {
+            if (isPlayingFullLesson) {
+                stopAutoPlay();
+            } else {
+                startAutoDirectPlay();
+            }
+        }
+
+        function stopAutoPlay() {
+            isPlayingFullLesson = false;
+            isPlayingEx1 = false;
+            isPlayingEx2 = false;
+            resetAllHighlights();
+            updatePlayBtnUI();
+            updateEx1PlayBtnUI();
+            updateEx2PlayBtnUI();
+        }
+
+        function updatePlayBtnUI() {
+            const btn = document.getElementById('playAllBtn');
+            const icon = document.getElementById('playAllIcon');
+            const text = document.getElementById('playAllText');
+            if (!btn) return;
+
+            if (isPlayingFullLesson) {
+                icon.className = 'fa-solid fa-stop';
+                text.innerText = 'Stop Reading • وقف القراءة';
+                btn.classList.replace('from-emerald-500', 'from-rose-500');
+                btn.classList.replace('to-teal-600', 'to-red-600');
+            } else {
+                icon.className = 'fa-solid fa-play';
+                text.innerText = 'Auto Read (Repeat 2x)';
+                btn.classList.replace('from-rose-500', 'from-emerald-500');
+                btn.classList.replace('to-red-600', 'to-teal-600');
+            }
+        }
+
+        // تشغيل وقراءة محادثات التمرين الثاني حصراً وتكرارها مرتين
+        function togglePlayExercise2() {
+            if (isPlayingEx2) {
+                stopAutoPlay();
+            } else {
+                stopAutoPlay();
+                startExercise2AutoPlay();
+            }
+        }
+
+        function startExercise2AutoPlay() {
+            resetAllHighlights();
+            isPlayingEx2 = true;
+            ex2Index = 0;
+            updateEx2PlayBtnUI();
+            playNextEx2Item();
+        }
+
+        function updateEx2PlayBtnUI() {
+            const btn = document.getElementById('playEx2Btn');
+            const icon = document.getElementById('playEx2Icon');
+            const text = document.getElementById('playEx2Text');
+            if (!btn) return;
+
+            if (isPlayingEx2) {
+                icon.className = 'fa-solid fa-stop';
+                text.innerText = 'Stop Reading • وقف القراءة';
+                btn.classList.replace('from-emerald-500', 'from-rose-500');
+                btn.classList.replace('to-teal-600', 'to-red-600');
+            } else {
+                icon.className = 'fa-solid fa-play';
+                text.innerText = 'Auto Read (Repeat 2x)';
+                btn.classList.replace('from-rose-500', 'from-emerald-500');
+                btn.classList.replace('to-red-600', 'to-teal-600');
+            }
+        }
+
+        function playNextEx2Item() {
+            if (!isPlayingEx2 || ex2Index >= exercise2AudioSequences.length) {
+                if (ex2Index >= exercise2AudioSequences.length && typeof confetti === 'function') {
+                    confetti({ particleCount: 70, spread: 80, origin: { y: 0.6 } });
+                }
+                stopAutoPlay();
+                return;
+            }
+
+            const item = exercise2AudioSequences[ex2Index];
+            const panel = document.getElementById(item.panelId);
+            if (panel) {
+                panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            speakTextTwice(item.text, item.elId, () => {
+                if (isPlayingEx2) {
+                    ex2Index++;
+                    const timer = setTimeout(playNextEx2Item, 500);
+                    activeTimeouts.push(timer);
+                }
+            });
+        }
+
+        function playNextLessonItem() {
+            if (!isPlayingFullLesson || fullLessonIndex >= allLessonAudioSequences.length) {
+                if (fullLessonIndex >= allLessonAudioSequences.length && typeof confetti === 'function') {
+                    confetti({ particleCount: 70, spread: 80, origin: { y: 0.5 } });
+                    showToast("اكتملت قراءة جدول القواعد • توقفت القراءة هنا ✅");
+                }
+                stopAutoPlay();
+                return;
+            }
+
+            const item = allLessonAudioSequences[fullLessonIndex];
+            const el = document.getElementById(item.elId);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            speakTextTwice(item.text, item.elId, () => {
+                if (isPlayingFullLesson) {
+                    fullLessonIndex++;
+                    const timer = setTimeout(playNextLessonItem, 500);
+                    activeTimeouts.push(timer);
+                }
+            });
+        }
+
+        function toggleSpeechRate() {
+            const display = document.getElementById('speedDisplay');
+            if (currentSpeechRate === 0.75) {
+                currentSpeechRate = 0.58;
+                if (display) display.innerText = 'Slow (0.6x)';
+            } else if (currentSpeechRate === 0.58) {
+                currentSpeechRate = 0.92;
+                if (display) display.innerText = 'Normal (0.9x)';
+            } else {
+                currentSpeechRate = 0.75;
+                if (display) display.innerText = 'Calm (0.75x)';
+            }
+        }
+
+        // =========================================================================
+        // EXERCISE 3 INTERACTION & CHECKING
+        // =========================================================================
+        function checkRuleChoice(qNum, selectedOption, btnEl) {
+            const qObj = exercise3Data.find(q => q.id === qNum);
+            if (!qObj) return;
+
+            const isCorrect = (qObj.correct === selectedOption);
+            const parentCard = document.getElementById(`q-card-${qNum}`);
+            const buttons = parentCard.querySelectorAll('.rule-btn');
+            const blankDisp = document.getElementById(`blank-disp-${qNum}`);
+
+            buttons.forEach(b => b.classList.remove('circled-correct', 'circled-wrong'));
+
+            if (isCorrect) {
+                btnEl.classList.add('circled-correct');
+                userRuleAnswers[qNum] = true;
+                if (blankDisp) blankDisp.innerText = qObj.correct;
+                speakTextTwice(qObj.question);
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 35, spread: 55, origin: { y: 0.75 } });
+                }
+            } else {
+                btnEl.classList.add('circled-wrong');
+                speakPhraseOnce("Try again! " + qObj.explanation);
+                setTimeout(() => {
+                    btnEl.classList.remove('circled-wrong');
+                }, 800);
+            }
+        }
+
+        function toggleAllAnswers() {
+            showingAnswers = !showingAnswers;
+            const btn = document.getElementById('showAnswersBtn');
+            const btnText = document.getElementById('showAnswersText');
+
+            exercise3Data.forEach(q => {
+                const parentCard = document.getElementById(`q-card-${q.id}`);
+                const buttons = parentCard.querySelectorAll('.rule-btn');
+                const blankDisp = document.getElementById(`blank-disp-${q.id}`);
+
+                buttons.forEach(b => {
+                    b.classList.remove('circled-correct', 'circled-wrong');
+                    if (showingAnswers && b.getAttribute('data-opt') === q.correct) {
+                        b.classList.add('circled-correct');
+                        if (blankDisp) blankDisp.innerText = q.correct;
+                    } else if (!showingAnswers) {
+                        if (blankDisp) blankDisp.innerText = '[ ... ]';
+                    }
+                });
+            });
+
+            if (btn && btnText) {
+                if (showingAnswers) {
+                    btnText.innerText = 'Hide Answers';
+                    btn.classList.replace('bg-amber-500', 'bg-slate-700');
+                    btn.classList.replace('hover:bg-amber-600', 'hover:bg-slate-800');
+                    if (typeof confetti === 'function') {
+                        confetti({ particleCount: 50, spread: 70, origin: { y: 0.7 } });
+                    }
+                } else {
+                    btnText.innerText = 'Show Answers';
+                    btn.classList.replace('bg-slate-700', 'bg-amber-500');
+                    btn.classList.replace('hover:bg-slate-800', 'hover:bg-amber-600');
+                }
+            }
+        }
+
+        function resetExercise3() {
+            showingAnswers = false;
+            const btnText = document.getElementById('showAnswersText');
+            const btn = document.getElementById('showAnswersBtn');
+            if (btnText) btnText.innerText = 'Show Answers';
+            if (btn) {
+                btn.classList.replace('bg-slate-700', 'bg-amber-500');
+                btn.classList.replace('hover:bg-slate-800', 'hover:bg-amber-600');
+            }
+            userRuleAnswers = {};
+            document.querySelectorAll('.rule-btn').forEach(b => {
+                b.classList.remove('circled-correct', 'circled-wrong');
+            });
+            [1, 2, 3].forEach(id => {
+                const blankDisp = document.getElementById(`blank-disp-${id}`);
+                if (blankDisp) blankDisp.innerText = '[ ... ]';
+            });
+        }
+
+        // =========================================================================
+        // PERSISTENT IMAGE UPLOADER & LOCALSTORAGE
+        // =========================================================================
+        const defaultSceneSvgs = {
+            scene1: `
+                <svg viewBox="0 0 240 180" class="w-full h-full object-contain drop-shadow">
+                    <rect x="20" y="20" width="200" height="140" rx="16" fill="#bae6fd" stroke="#0284c7" stroke-width="3"/>
+                    <rect x="40" y="60" width="70" height="90" rx="8" fill="#3b82f6"/>
+                    <rect x="130" y="60" width="70" height="90" rx="8" fill="#3b82f6"/>
+                    <circle cx="75" cy="80" r="18" fill="#fed7aa"/>
+                    <path d="M60 70 Q75 55 90 70 Z" fill="#92400e"/>
+                    <rect x="62" y="98" width="26" height="45" rx="6" fill="#10b981"/>
+                    <circle cx="165" cy="80" r="18" fill="#fed7aa"/>
+                    <path d="M148 72 Q165 52 182 72 L182 95 L148 95 Z" fill="#f59e0b"/>
+                    <rect x="152" y="98" width="26" height="45" rx="6" fill="#ec4899"/>
+                    <polygon points="148,110 182,105 185,130 152,135" fill="#fde047" stroke="#b45309" stroke-width="2"/>
+                    <text x="154" y="125" font-size="8" font-weight="900" fill="#dc2626">COMIC</text>
+                </svg>`,
+            scene2: `
+                <svg viewBox="0 0 240 180" class="w-full h-full object-contain drop-shadow">
+                    <rect x="20" y="20" width="200" height="140" rx="14" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+                    <rect x="40" y="35" width="40" height="50" rx="4" fill="#bae6fd"/>
+                    <rect x="160" y="35" width="40" height="50" rx="4" fill="#bae6fd"/>
+                    <circle cx="85" cy="85" r="16" fill="#fed7aa"/>
+                    <path d="M72 75 Q85 60 98 75 Z" fill="#b45309"/>
+                    <rect x="74" y="101" width="22" height="45" rx="5" fill="#f97316"/>
+                    <rect x="64" y="98" width="10" height="30" rx="3" fill="#64748b"/>
+                    <circle cx="155" cy="75" r="18" fill="#fed7aa"/>
+                    <path d="M138 65 Q155 45 172 65 L172 90 L138 90 Z" fill="#dc2626"/>
+                    <rect x="144" y="93" width="22" height="55" rx="5" fill="#0284c7"/>
+                </svg>`,
+            scene3: `
+                <svg viewBox="0 0 240 180" class="w-full h-full object-contain drop-shadow">
+                    <path d="M30 40 L210 40 L225 150 L15 150 Z" fill="#93c5fd" stroke="#1d4ed8" stroke-width="2.5"/>
+                    <rect x="25" y="100" width="190" height="50" rx="8" fill="#334155"/>
+                    <circle cx="85" cy="80" r="16" fill="#fed7aa"/>
+                    <path d="M72 70 Q85 55 98 70 Z" fill="#dc2626"/>
+                    <circle cx="155" cy="80" r="16" fill="#fed7aa"/>
+                    <path d="M142 70 Q155 55 168 70 Z" fill="#b45309"/>
+                    <line x1="70" y1="90" x2="100" y2="135" stroke="#ef4444" stroke-width="3"/>
+                    <line x1="140" y1="90" x2="170" y2="135" stroke="#ef4444" stroke-width="3"/>
+                </svg>`
+        };
+
+        function triggerImageUpload(sceneKey) {
+            const fileInput = document.getElementById(`file-upload-${sceneKey}`);
+            if (fileInput) fileInput.click();
+        }
+
+        function handleImageUpload(event, sceneKey) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 700;
+                    const scaleSize = MAX_WIDTH / img.width;
+                    canvas.width = (img.width > MAX_WIDTH) ? MAX_WIDTH : img.width;
+                    canvas.height = (img.width > MAX_WIDTH) ? (img.height * scaleSize) : img.height;
+                    
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+                    try {
+                        localStorage.setItem(`saved_p24_img_${sceneKey}`, compressedDataUrl);
+                    } catch (err) {
+                        console.warn('LocalStorage limit reached', err);
+                    }
+
+                    applyImageToScene(sceneKey, compressedDataUrl);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function applyImageToScene(sceneKey, imageUrl) {
+            const container = document.getElementById(`image-container-${sceneKey}`);
+            if (container) {
+                container.classList.add('has-custom-img');
+                container.innerHTML = `
+                    <img src="${imageUrl}" alt="${sceneKey}" class="w-full h-auto object-contain block rounded-xl shadow-sm" />
+                    <button onclick="event.stopPropagation(); resetSceneImage('${sceneKey}')" title="Reset to default drawing • استعادة الرسم الافتراضي" class="absolute top-2 right-2 w-7 h-7 bg-slate-900/75 hover:bg-slate-900 text-white rounded-full flex items-center justify-center text-xs shadow transition z-10">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </button>
+                `;
+            }
+        }
+
+        function resetSceneImage(sceneKey) {
+            const container = document.getElementById(`image-container-${sceneKey}`);
+            if (container) {
+                container.classList.remove('has-custom-img');
+                if (defaultSceneSvgs[sceneKey]) {
+                    container.innerHTML = defaultSceneSvgs[sceneKey];
+                }
+            }
+            try {
+                localStorage.removeItem(`saved_p24_img_${sceneKey}`);
+            } catch (err) {}
+            const fileInput = document.getElementById(`file-upload-${sceneKey}`);
+            if (fileInput) fileInput.value = '';
+        }
+
+        function restoreAllSavedImages() {
+            ['scene1', 'scene2', 'scene3'].forEach(key => {
+                try {
+                    const savedImg = localStorage.getItem(`saved_p24_img_${key}`);
+                    if (savedImg) {
+                        applyImageToScene(key, savedImg);
+                    }
+                } catch(e) {}
+            });
+        }
+
+        function showToast(text) {
+            const toast = document.getElementById('liveReadingToast');
+            const toastText = document.getElementById('toastWord');
+            if (toastText) toastText.innerText = text;
+            if (toast) {
+                toast.classList.remove('opacity-0', 'translate-y-8');
+                toast.classList.add('opacity-100', 'translate-y-0');
+            }
+        }
+
+        function hideToast() {
+            const toast = document.getElementById('liveReadingToast');
+            if (toast) {
+                toast.classList.add('opacity-0', 'translate-y-8');
+                toast.classList.remove('opacity-100', 'translate-y-0');
+            }
+        }
+
+        function initApp() {
+            restoreAllSavedImages();
+            populateVoiceList();
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
+
+        window.onload = function() {
+            initApp();
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.onvoiceschanged = () => {
+                    populateVoiceList();
+                };
+            }
+        };
+    </script>
+</body>
+</html>
